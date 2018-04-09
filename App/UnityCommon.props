@@ -1,9 +1,0 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <UnityWSASolutionName>DRUMMAR</UnityWSASolutionName>
-        <UnityWSASolutionDir>C:\Users\falen\Desktop\CEG 4410\DRUMMAR\App\</UnityWSASolutionDir>
-        <UnityProjectDir>C:\Users\falen\Desktop\CEG 4410\DRUMMAR\</UnityProjectDir>
-        <UnityWSAPlayerDir>C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport\</UnityWSAPlayerDir>
-        <UnityWSAToolsDir>$(UnityWSASolutionDir)Unity\Tools\</UnityWSAToolsDir>
-    </PropertyGroup>
-</Project>

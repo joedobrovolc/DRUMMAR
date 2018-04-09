@@ -569,9 +569,9 @@ PlayerSettings:
     Metro: 2
   incrementalIl2cppBuild: {}
   additionalIl2CppArgs: 
-  scriptingRuntimeVersion: 0
+  scriptingRuntimeVersion: 1
   apiCompatibilityLevelPerPlatform:
-    Metro: 1
+    Metro: 3
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: DRUMMAR
@@ -619,7 +619,7 @@ PlayerSettings:
       SharedUserCertificates: False
       SpatialPerception: True
       UserAccountInformation: False
-      VideosLibrary: False
+      VideosLibrary: True
       VoipCall: False
       WebCam: True
   metroFTAName: 
@@ -679,7 +679,7 @@ PlayerSettings:
     Hub: 0
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 4a4ed3a4-c216-40a3-b25e-ee135f7f27d9
   projectName: DRUMMAR
   organizationId: jdobrovolc

@@ -1,2 +1,0 @@
-C:\Users\falen\Desktop\CEG 4410\DRUMMAR\App\DRUMMAR\DRUMMAR.csproj;x86
-C:\Users\falen\Desktop\CEG 4410\DRUMMAR\App\GeneratedProjects\UWP\Assembly-CSharp\Assembly-CSharp.csproj;x86
