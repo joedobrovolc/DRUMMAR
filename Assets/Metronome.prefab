@@ -109,10 +109,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -190,8 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e293ddfd6621e7f4a8046ecf0c414c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tempo: 120
-  _subdivisions: 8
+  bpm: 140
+  gain: 0.5
+  signatureHi: 4
+  signatureLo: 4
 --- !u!114 &114538171189646560
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,87 +1,63 @@
 ﻿using UnityEngine;
-using System;
+using System.Collections;
 
-public class Metronome : MonoBehaviour
+// The code example shows how to implement a metronome that procedurally generates the click sounds via the OnAudioFilterRead callback.
+// While the game is paused or the suspended, this time will not be updated and sounds playing will be paused. Therefore developers of music scheduling routines do not have to do any rescheduling after the app is unpaused
+
+[RequireComponent(typeof(AudioSource))]
+public class Metronome: MonoBehaviour
 {
-    /// <summary>
-    /// Subscribe to this to listen for ticks coming from the metronome.
-    /// This also passes the time that the tick should occur, relative to AudioSettings.dspTime.
-    /// That means you can schedule audio system calls in the future with this info.
-    /// </summary>
-    public event Action<double> Ticked;
-
-    [SerializeField, Tooltip("The tempo in beats per minute"), Range(15f, 200f)] private double _tempo = 120.0;
-    [SerializeField, Tooltip("The number of ticks per beat"), Range(1, 8)] private int _subdivisions = 4;
-
-    // the length of a single tick in seconds
-    private double _tickLength;
-
-    // the next tick time, relative to AudioSettings.dspTime
-    private double _nextTickTime;
-
-    /// <summary>
-    /// Recalculate the tick length and reset the next tick time
-    /// </summary>
-    private void Reset()
+    public double bpm = 140.0F;
+    public float gain = 0.5F;
+    public int signatureHi = 4;
+    public int signatureLo = 4;
+    private double nextTick = 0.0F;
+    private float amp = 0.0F;
+    private float phase = 0.0F;
+    private double sampleRate = 0.0F;
+    private int accent;
+    private bool running = false;
+    void Start()
     {
-        Recalculate();
-        // bump the next tick time ahead the length of one tick so we don't get a double trigger
-        _nextTickTime = AudioSettings.dspTime + _tickLength;
+        accent = signatureHi;
+        double startTick = AudioSettings.dspTime;
+        sampleRate = AudioSettings.outputSampleRate;
+        nextTick = startTick * sampleRate;
+        running = true;
     }
 
-    /// <summary>
-    /// Derive the length of a tick in seconds from the tempo and subdivisions provided
-    /// </summary>
-    private void Recalculate()
+    void OnAudioFilterRead(float[] data, int channels)
     {
-        double beatsPerSecond = _tempo / 60.0;
-        double ticksPerSecond = beatsPerSecond * _subdivisions;
-        _tickLength = 1.0 / ticksPerSecond;
-    }
+        if (!running)
+            return;
 
-    /// <summary>
-    /// This gets called when the GameObject first gets set up.
-    /// Do initialization here.
-    /// </summary>
-    private void Awake()
-    {
-        Reset();
-    }
-
-    /// <summary>
-    /// This gets called in the editor when an inspector control changes.
-    /// Recalculate the tick length here.
-    /// </summary>
-    private void OnValidate()
-    {
-        if (Application.isPlaying)
+        double samplesPerTick = sampleRate * 60.0F / bpm * 4.0F / signatureLo;
+        double sample = AudioSettings.dspTime * sampleRate;
+        int dataLen = data.Length / channels;
+        int n = 0;
+        while (n < dataLen)
         {
-            Recalculate();
-        }
-    }
-
-    /// <summary>
-    /// This gets called once per game frame.
-    /// Check to see if we should schedule any ticks here.
-    /// </summary>
-    private void Update()
-    {
-        double currentTime = AudioSettings.dspTime;
-
-        // look ahead the length of one frame (approximately), because we'll be scheduling samples
-        currentTime += Time.deltaTime;
-
-        // there may be more than one tick within the next frame, so this will catch them all
-        while (currentTime > _nextTickTime)
-        {
-            // if someone has subscribed to ticks from the metronome, let them know we got a tick
-            if (Ticked != null)
+            float x = gain * amp * Mathf.Sin(phase);
+            int i = 0;
+            while (i < channels)
             {
-                Ticked(_nextTickTime);
+                data[n * channels + i] += x;
+                i++;
             }
-
-            // increment the next tick time
-            _nextTickTime += _tickLength;
+            while (sample + n >= nextTick)
+            {
+                nextTick += samplesPerTick;
+                amp = 1.0F;
+                if (++accent > signatureHi)
+                {
+                    accent = 1;
+                    amp *= 2.0F;
+                }
+                Debug.Log("Tick: " + accent + "/" + signatureHi);
+            }
+            phase += amp * 0.3F;
+            amp *= 0.993F;
+            n++;
         }
     }
 }
